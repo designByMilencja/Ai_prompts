@@ -7,13 +7,14 @@ import {getProviders, signIn, signOut, useSession} from "next-auth/react";
 const Nav = () => {
     const isUserLoggedIn = true;
     const [providers, setProvidersW] = useState(null);
-    useEffect(()=> {
+    const [toggleDropdown, setToggleDropdown] = useState(false)
+    useEffect(() => {
         const setProviders = async () => {
             const response = await getProviders();
             setProvidersW(response);
         }
         setProviders();
-    },[])
+    }, [])
     return (
         <nav className="flex-between w-full mb-16 pt-3">
             <Link href="/" className="flex gap-2 flex-center">
@@ -31,16 +32,38 @@ const Nav = () => {
                         <Link href="/create-prompt" className="black_btn">Create Post</Link>
                         <button type="button" className="outline_btn" onClick={signOut}>Sign Out</button>
                         <Link href="/profile">
-                            <Image src="/assets/images/logo.svg" width={37} height={37} className="rounded-full" alt="profile"/>
+                            <Image src="/assets/images/logo.svg" width={37} height={37} className="rounded-full"
+                                   alt="profile"/>
                         </Link>
                     </div>)
                     :
                     (<>
-                    {providers &&
-                    Object.values(providers).map((provider)=> (<button  key={provider.name} type="button" className="black_btn" onClick={()=>signIn(provider.id)}>Sign In</button>))}
+                        {providers &&
+                            Object.values(providers).map((provider) => (
+                                <button key={provider.name} type="button" className="black_btn"
+                                        onClick={() => signIn(provider.id)}>Sign In</button>))}
                     </>)}
             </div>
             {/*    Mobile nav*/}
+            <div className="sm:hidden flex relative">
+                {isUserLoggedIn ?
+                    (<div className="flex">
+                        <Image src="/assets/images/logo.svg" width={37} height={37} className="rounded-full"
+                               alt="profile"
+                               onClick={() => {setToggleDropdown((prevState) => !prevState)
+                               }}/>
+                        {toggleDropdown && (<div className="dropdown">
+                            <Link href="/profile" className="dropdown_link" onClick={() => {
+                                setToggleDropdown(false)
+                            }}>My profile</Link>
+                        </div>)}
+                    </div>) : (<>
+                        {providers &&
+                            Object.values(providers).map((provider) => (
+                                <button key={provider.name} type="button" className="black_btn"
+                                        onClick={() => signIn(provider.id)}>Sign In</button>))}
+                    </>)}
+            </div>
         </nav>)
 }
 export default Nav
