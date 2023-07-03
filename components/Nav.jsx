@@ -32,7 +32,8 @@ const Nav = () => {
                         <Link href="/create-prompt" className="black_btn">Create Post</Link>
                         <button type="button" className="outline_btn" onClick={signOut}>Sign Out</button>
                         <Link href="/profile">
-                            <Image src="/assets/images/logo.svg" width={37} height={37} className="rounded-full"
+                            <Image src={session?.user.image}
+                                   width={37} height={37} className="rounded-full"
                                    alt="profile"/>
                         </Link>
                     </div>)
@@ -48,7 +49,8 @@ const Nav = () => {
             <div className="sm:hidden flex relative">
                 {session?.user ?
                     (<div className="flex">
-                        <Image src="/assets/images/logo.svg" width={37} height={37} className="rounded-full"
+                        <Image src={session?.user.image}
+                               width={37} height={37} className="rounded-full"
                                alt="profile"
                                onClick={() => {setToggleDropdown((prevState) => !prevState)
                                }}/>
